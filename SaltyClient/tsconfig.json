@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es2019",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "out": "js/index.js",
+        "sourceMap": false
+    },
+    "Files": [
+        "Enums.ts",
+        "Modules.ts",
+        "VoiceManager.ts"
+    ]
+}

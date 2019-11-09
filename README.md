@@ -1,4 +1,4 @@
-**The TypeScript implementation is WIP**
+**The TypeScript implementation is WIP, use the compatible [C# server](https://github.com/saltminede/saltychat-ragemp) for now**
 
 # Salty Chat for [RAGEMP](https://rage.mp/)
 An example implementation of Salty Chat for [RAGEMP](https://rage.mp/).

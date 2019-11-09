@@ -1,11 +1,13 @@
+/// <reference path="Enums.ts" />
+
 class PluginCommand {
     // Props
-    public Command: SaltyClient.Command;
+    public Command: Command;
     public ServerUniqueIdentifier: string;
     public Parameter: object;
 
     // CTOR
-    constructor(command: SaltyClient.Command, serverIdentifier: string, parameter: object) {
+    constructor(command: Command, serverIdentifier: string, parameter: object) {
         this.Command = command;
         this.ServerUniqueIdentifier = serverIdentifier;
         this.Parameter = parameter;
@@ -20,17 +22,67 @@ class PluginCommand {
 class GameInstance {
     // Props
     public ServerUniqueIdentifier: string;
-    public TeamSpeakName: string;
-    public IngameChannel: number;
-    public IngameChannelPassword: string;
+    public Name: string;
+    public ChannelId: number;
+    public ChannelPassword: string;
     public SoundPack: string;
 
     // CTOR
     constructor(serverIdentifier: string, name: string, channelId: number, channelPassword: string, soundPack: string) {
         this.ServerUniqueIdentifier = serverIdentifier;
-        this.TeamSpeakName = name;
-        this.IngameChannel = channelId;
-        this.IngameChannelPassword = channelPassword;
+        this.Name = name;
+        this.ChannelId = channelId;
+        this.ChannelPassword = channelPassword;
         this.SoundPack = soundPack;
+    }
+}
+
+class PlayerState {
+    // Props
+    public Name: string;
+    public Position: Vector3Mp;
+    public Rotation: number;
+    public VoiceRange: number;
+    public IsAlive: boolean;
+    public VolumeOverride: number;
+
+    // CTOR
+    constructor(name: string, position: Vector3Mp, rotation: number, voiceRange: number, isAlive: boolean, volumeOverride: number) {
+        this.Name = name;
+        this.Position = position;
+        this.Rotation = rotation;
+        this.VoiceRange = voiceRange;
+        this.IsAlive = isAlive;
+        this.VolumeOverride = volumeOverride;
+    }
+}
+
+class Sound {
+    // Props
+    public Filename: string;
+    public IsLoop: boolean;
+    public Handle: string;
+
+    // CTOR
+    constructor(filename: string, isLoop: boolean, handle: string) {
+        this.Filename = filename;
+        this.IsLoop = isLoop;
+        this.Handle = handle;
+    }
+}
+
+class VoiceClient {
+    // Props
+    public Player: PlayerMp;
+    public TeamSpeakName: string;
+    public VoiceRange: number;
+    public IsAlive: boolean;
+
+    // CTOR
+    constructor(player: PlayerMp, tsName: string, voiceRange: number, isAlive: boolean) {
+        this.Player = player;
+        this.TeamSpeakName = tsName;
+        this.VoiceRange = voiceRange;
+        this.IsAlive = isAlive;
     }
 }
