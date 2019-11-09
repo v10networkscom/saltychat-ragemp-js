@@ -1,0 +1,12 @@
+{
+  "name": "salty-server",
+  "version": "0.0.0",
+  "description": "SaltyServer",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#master"
+  }
+}

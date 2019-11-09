@@ -1,0 +1,12 @@
+{
+  "name": "salty-client",
+  "version": "0.0.0",
+  "description": "SaltyClient",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/ragemp-c": "https://github.com/CocaColaBear/types-ragemp-c/tarball/master"
+  }
+}
