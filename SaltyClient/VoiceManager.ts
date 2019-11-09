@@ -226,21 +226,6 @@ class VoiceManager {
     private PlayerStateUpdate() {
         let playerPosition: Vector3Mp = mp.players.local.position;
 
-        this.ExecuteCommand(
-            new PluginCommand(
-                Command.SelfStateUpdate,
-                this.ServerUniqueIdentifier,
-                new PlayerState(
-                    null,
-                    playerPosition,
-                    mp.game.cam.getGameplayCamRot(0).z,
-                    null,
-                    false,
-                    null
-                )
-            )
-        );
-
         this.VoiceClients.forEach((voiceClient: VoiceClient, playerId: number) => {
             let nPlayerPosition: Vector3Mp = voiceClient.Player.position;
 
@@ -259,6 +244,21 @@ class VoiceManager {
                 )
             );
         });
+
+        this.ExecuteCommand(
+            new PluginCommand(
+                Command.SelfStateUpdate,
+                this.ServerUniqueIdentifier,
+                new PlayerState(
+                    null,
+                    playerPosition,
+                    mp.game.cam.getGameplayCamRot(0).z,
+                    null,
+                    false,
+                    null
+                )
+            )
+        );
     }
 
     private ToggleVoiceRange() {
