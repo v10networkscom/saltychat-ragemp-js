@@ -3,7 +3,7 @@
         "target": "es2019",
         "removeComments": true,
         "preserveConstEnums": true,
-        "out": "../dist/client_packages/SaltyChat/index.js",
+        "out": "../../dist/client_packages/SaltyChat/index.js",
         "sourceMap": false
     },
     "Files": [
