@@ -1,5 +1,6 @@
 /// <reference path="Enums.ts" />
 
+//#region PluginCommand
 class PluginCommand {
     // Props
     public Command: Command;
@@ -18,7 +19,9 @@ class PluginCommand {
         return JSON.stringify(this);
     }
 }
+//#endregion PluginCommand
 
+//#region GameInstance
 class GameInstance {
     // Props
     public ServerUniqueIdentifier: string;
@@ -36,7 +39,9 @@ class GameInstance {
         this.SoundPack = soundPack;
     }
 }
+//#endregion GameInstance
 
+//#region PlayerState
 class PlayerState {
     // Props
     public Name: string;
@@ -56,7 +61,69 @@ class PlayerState {
         this.VolumeOverride = volumeOverride;
     }
 }
+//#endregion PlayerState
 
+//#region PhoneCommunication
+class PhoneCommunication {
+    // Props
+    public Name: string;
+    public SignalStrength: number;
+    public Volume: number;
+
+    public Direct: boolean;
+    public RelayedBy: string[];
+
+    // CTOR
+    constructor(name: string, signalStrength: number, volume: number, direct: boolean, relayedBy: string[]) {
+        this.Name = name;
+        this.SignalStrength = signalStrength;
+        this.Volume = volume;
+
+        this.Direct = direct;
+        this.RelayedBy = relayedBy;
+    }
+}
+//#endregion PhoneCommunication
+
+//#region RadioCommunication
+class RadioCommunication {
+    // Props
+    public Name: string;
+    public SenderRadioType: RadioType;
+    public OwnRadioType: RadioType;
+    public PlayMicClick: boolean;
+    public Volume: number;
+
+    public Direct: boolean;
+    public RelayedBy: string[];
+
+    // CTOR
+    constructor(name: string, senderRadioType: RadioType, ownRadioType: RadioType, playerMicClick: boolean, volume: number, direct: boolean, relayedBy: string[]) {
+        this.Name = name;
+        this.SenderRadioType = senderRadioType;
+        this.OwnRadioType = ownRadioType;
+        this.PlayMicClick = playerMicClick;
+        this.Volume = volume;
+
+        this.Direct = direct;
+        this.RelayedBy = relayedBy;
+    }
+}
+//#endregion RadioCommunication
+
+//#region RadioTower
+class RadioTower {
+    // Props
+    public Towers: Vector3Mp[];
+
+    // CTOR
+    constructor(towers: Vector3Mp[]) {
+        this.Towers = towers;
+    }
+}
+//#endregion RadioTower
+
+//#region Sound
 class Sound {
     // Props
     public Filename: string;
@@ -70,7 +137,9 @@ class Sound {
         this.Handle = handle;
     }
 }
+//#endregion Sound
 
+//#region VoiceClient
 class VoiceClient {
     // Props
     public Player: PlayerMp;
@@ -86,3 +155,4 @@ class VoiceClient {
         this.IsAlive = isAlive;
     }
 }
+//#endregion VoiceClient

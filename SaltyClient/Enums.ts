@@ -33,3 +33,12 @@ enum UpdateBranch
     Testing = 1,
     PreBuild = 2
 }
+
+enum RadioType
+{
+    None = 1 << 0,
+    ShortRange = 1 << 1,
+    LongRange = 1 << 2,
+    Distributed = 1 << 3,
+    UltraShortRange = 1 << 4,
+}
