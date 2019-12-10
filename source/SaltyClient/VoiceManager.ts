@@ -102,6 +102,23 @@ class VoiceManager {
         let playerId: number = parseInt(playerHandle);
 
         if (this.VoiceClients.has(playerId)) {
+            let voiceClient: VoiceClient = this.VoiceClients.get(playerId);
+
+            this.ExecuteCommand(
+                new PluginCommand(
+                    Command.RemovePlayer,
+                    this.ServerUniqueIdentifier,
+                    new PlayerState(
+                        voiceClient.TeamSpeakName,
+                        null,
+                        null,
+                        null,
+                        false,
+                        null
+                    )
+                )
+            );
+
             this.VoiceClients.delete(playerId);
         }
     }
