@@ -153,6 +153,7 @@ class VoiceManager {
         this.IngameChannelPassword = ingameChannelPassword;
         this.IsEnabled = true;
         this.Cef = mp.browsers.new("package://SaltyChat/SaltyWebSocket.html");
+        this.Cef.active = false;
     }
     OnUpdateVoiceClient(playerHandle, tsName, voiceRange) {
         let playerId = parseInt(playerHandle);

@@ -70,6 +70,7 @@ class VoiceManager {
 
         this.IsEnabled = true;
         this.Cef = mp.browsers.new("package://SaltyChat/SaltyWebSocket.html");
+        this.Cef.active = false;
     }
     
     private OnUpdateVoiceClient(playerHandle: string, tsName: string, voiceRange: number): void {
