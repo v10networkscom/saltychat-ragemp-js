@@ -136,7 +136,7 @@ class VoiceManager {
         mp.events.add("SaltyChat_EstablishedCallRelayed", (playerHandle, direct, relayJson) => this.OnEstablishCallRelayed(playerHandle, direct, relayJson));
         mp.events.add("SaltyChat_EndCall", (playerHandle) => this.OnEndCall(playerHandle));
         mp.events.add("SaltyChat_SetRadioChannel", (radioChannel) => this.OnSetRadioChannel(radioChannel));
-        mp.events.add("SaltyChat_IsSending", (playerHandle, isOnRadio) => this.OnPlayerIsSending(playerHandle, isOnRadio));
+        mp.events.add("SaltyChat_IsSending", (playerHandle, channelName, isOnRadio, stateChanged, position) => this.OnPlayerIsSending(playerHandle, channelName, isOnRadio, stateChanged, position));
         mp.events.add("SaltyChat_IsSendingRelayed", (playerHandle, isOnRadio, stateChange, direct, relayJson) => this.OnPlayerIsSendingRelayed(playerHandle, isOnRadio, stateChange, direct, relayJson));
         mp.events.add("SaltyChat_UpdateRadioTowers", (radioTowerJson) => this.OnUpdateRadioTowers(radioTowerJson));
         mp.events.add("SaltyChat_OnConnected", () => this.OnPluginConnected());
@@ -247,7 +247,7 @@ class VoiceManager {
             this.PlaySound("leaveRadioChannel", false, "radio");
         }
     }
-    OnPlayerIsSending(playerHandle, isOnRadio) {
+    OnPlayerIsSending(playerHandle, channelName, isOnRadio, stateChanged, position) {
         let playerId = parseInt(playerHandle);
         let player = mp.players.atRemoteId(playerId);
         if (player == mp.players.local) {
@@ -256,6 +256,7 @@ class VoiceManager {
         else if (this.VoiceClients.has(playerId)) {
             let voiceClient = this.VoiceClients.get(playerId);
             if (isOnRadio) {
+                this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, this.ServerUniqueIdentifier, new PlayerState(voiceClient.TeamSpeakName, position, null, voiceClient.VoiceRange, voiceClient.IsAlive, null)));
                 this.ExecuteCommand(new PluginCommand(Command.RadioCommunicationUpdate, this.ServerUniqueIdentifier, new RadioCommunication(voiceClient.TeamSpeakName, RadioType.LongRange | RadioType.Distributed, RadioType.LongRange | RadioType.Distributed, true, null, true, null)));
             }
             else {

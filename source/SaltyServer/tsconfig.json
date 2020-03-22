@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es2019",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "out": "../../dist/packages/SaltyChat/index.js",
+        "sourceMap": false
+    },
+    "Files": [
+        "Radio.ts",
+        "SharedData.ts",
+        "SharedEvent.ts",
+        "VoiceClient.ts",
+        "VoiceManager.ts",
+    ]
+}
