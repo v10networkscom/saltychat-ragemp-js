@@ -25,7 +25,7 @@ class VoiceManager {
 
     private VoiceClients = new Map();
 
-    static readonly VoiceRanges: number[] = [ 3.0, 8.0, 15.0, 32.0 ];
+    static readonly VoiceRanges: number[] = [3.0, 8.0, 15.0, 32.0];
     //#endregion Props
 
     //#region CTOR
@@ -42,10 +42,10 @@ class VoiceManager {
         mp.events.add("SaltyChat_EstablishedCall", (playerHandle: string) => this.OnEstablishCall(playerHandle));
         mp.events.add("SaltyChat_EstablishedCallRelayed", (playerHandle: string, direct: boolean, relayJson: string) => this.OnEstablishCallRelayed(playerHandle, direct, relayJson));
         mp.events.add("SaltyChat_EndCall", (playerHandle: string) => this.OnEndCall(playerHandle));
-        
+
         // Radio Handling
         mp.events.add("SaltyChat_SetRadioChannel", (radioChannel: string) => this.OnSetRadioChannel(radioChannel));
-        mp.events.add("SaltyChat_IsSending", (playerHandle: string, isOnRadio: boolean) => this.OnPlayerIsSending(playerHandle, isOnRadio));
+        mp.events.add("SaltyChat_IsSending", (playerHandle: string, channelName: string, isOnRadio: boolean, stateChanged: boolean, position: Vector3Mp) => this.OnPlayerIsSending(playerHandle, channelName, isOnRadio, stateChanged, position));
         mp.events.add("SaltyChat_IsSendingRelayed", (playerHandle: string, isOnRadio: boolean, stateChange: boolean, direct: boolean, relayJson: string) => this.OnPlayerIsSendingRelayed(playerHandle, isOnRadio, stateChange, direct, relayJson));
         mp.events.add("SaltyChat_UpdateRadioTowers", (radioTowerJson: string) => this.OnUpdateRadioTowers(radioTowerJson));
 
@@ -54,7 +54,7 @@ class VoiceManager {
         mp.events.add("SaltyChat_OnDisconnected", () => this.OnPluginDisconnected());
         mp.events.add("SaltyChat_OnMessage", (messageJson: string) => this.OnPluginMessage(messageJson));
         mp.events.add("SaltyChat_OnError", (errorJson: string) => this.OnPluginError(errorJson));
-        
+
         // Render / on tick
         mp.events.add("render", () => this.OnTick());
     }
@@ -72,7 +72,7 @@ class VoiceManager {
         this.Cef = mp.browsers.new("package://SaltyChat/SaltyWebSocket.html");
         this.Cef.active = false;
     }
-    
+
     private OnUpdateVoiceClient(playerHandle: string, tsName: string, voiceRange: number): void {
         let playerId: number = parseInt(playerHandle);
 
@@ -98,7 +98,7 @@ class VoiceManager {
             }
         }
     }
-    
+
     private OnPlayerDisconnect(playerHandle: string): void {
         let playerId: number = parseInt(playerHandle);
 
@@ -123,7 +123,7 @@ class VoiceManager {
             this.VoiceClients.delete(playerId);
         }
     }
-    
+
     private OnPlayerTalking(playerHandle: string, isTalking: boolean): void {
         let playerId: number = parseInt(playerHandle);
 
@@ -137,7 +137,7 @@ class VoiceManager {
         else
             player.playFacialAnim("mood_normal_1", "facials@gen_male@variations@normal");
     }
-    
+
     private OnPlayerDied(playerHandle: string): void {
         let playerId: number = parseInt(playerHandle);
 
@@ -147,7 +147,7 @@ class VoiceManager {
             voiceClient.IsAlive = false;
         }
     }
-    
+
     private OnPlayerRevived(playerHandle: string): void {
         let playerId: number = parseInt(playerHandle);
 
@@ -158,7 +158,7 @@ class VoiceManager {
         }
     }
     //#endregion Remote Events (Basic Handling)
-    
+
     //#region Remote Events (Phone Handling)
     private OnEstablishCall(playerHandle: string): void {
         let playerId: number = parseInt(playerHandle);
@@ -187,7 +187,7 @@ class VoiceManager {
             )
         }
     }
-    
+
     private OnEstablishCallRelayed(playerHandle: string, direct: boolean, relayJson: string): void {
         let playerId: number = parseInt(playerHandle);
         let relays: string[] = JSON.parse(relayJson);
@@ -216,7 +216,7 @@ class VoiceManager {
             )
         }
     }
-    
+
     private OnEndCall(playerHandle: string): void {
         let playerId: number = parseInt(playerHandle);
 
@@ -252,7 +252,7 @@ class VoiceManager {
         }
     }
 
-    private OnPlayerIsSending(playerHandle: string, isOnRadio: boolean): void {
+    private OnPlayerIsSending(playerHandle: string, channelName: string, isOnRadio: boolean, stateChanged: boolean, position: Vector3Mp): void {
         let playerId: number = parseInt(playerHandle);
 
         let player: PlayerMp = mp.players.atRemoteId(playerId);
@@ -264,6 +264,20 @@ class VoiceManager {
             let voiceClient: VoiceClient = this.VoiceClients.get(playerId);
 
             if (isOnRadio) {
+                this.ExecuteCommand(
+                    new PluginCommand(
+                        Command.PlayerStateUpdate,
+                        this.ServerUniqueIdentifier,
+                        new PlayerState(
+                            voiceClient.TeamSpeakName,
+                            position,
+                            null,
+                            voiceClient.VoiceRange,
+                            voiceClient.IsAlive,
+                            null
+                        )
+                    )
+                );
                 this.ExecuteCommand(
                     new PluginCommand(
                         Command.RadioCommunicationUpdate,
@@ -386,7 +400,7 @@ class VoiceManager {
             return;
         }
 
-        if (message.Parameter === typeof('undefined') || message.Parameter == null)
+        if (message.Parameter === typeof ('undefined') || message.Parameter == null)
             return;
 
         let parameter = message.Parameter;
@@ -397,20 +411,17 @@ class VoiceManager {
             this.IsInGame = parameter.IsReady;
         }
 
-        if (parameter.IsTalking != this.IsTalking)
-        {
+        if (parameter.IsTalking != this.IsTalking) {
             this.IsTalking = parameter.IsTalking;
 
             mp.events.callRemote("SaltyChat_IsTalking", this.IsTalking);
         }
 
-        if (parameter.IsMicrophoneMuted != this.IsMicrophoneMuted)
-        {
+        if (parameter.IsMicrophoneMuted != this.IsMicrophoneMuted) {
             this.IsMicrophoneMuted = parameter.IsMicrophoneMuted;
         }
 
-        if (parameter.IsSoundMuted != this.IsSoundMuted)
-        {
+        if (parameter.IsSoundMuted != this.IsSoundMuted) {
             this.IsSoundMuted = parameter.IsSoundMuted;
         }
     }
@@ -470,7 +481,7 @@ class VoiceManager {
             )
         );
     }
-    
+
     public StopSound(handle: string) {
         this.ExecuteCommand(
             new PluginCommand(
